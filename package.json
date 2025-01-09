@@ -1,0 +1,11 @@
+{
+    "name": "desktop-widget",
+    "version": "1.0.0",
+    "main": "main-electron.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "devDependencies": {
+        "electron": "^25.9.8"
+    }
+}
