@@ -27,60 +27,167 @@ function updateQuote() {
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     document.getElementById('quote').textContent = randomQuote;
 }
+  // Advanced System Performance Monitor
+  class SystemMonitor {
+      constructor() {
+          this.cpuElement = document.getElementById('cpu');
+          this.memoryElement = document.getElementById('memory');
+          this.storageElement = document.getElementById('disk');
+      }
 
-// Enhanced System Stats functionality
-async function updateSystemStats() {
-    const cpuElement = document.getElementById('cpu');
-    const memoryElement = document.getElementById('memory');
-    const diskElement = document.getElementById('disk');
+      async getCPUUsage() {
+          // Use performance.now() for more accurate CPU measurement
+          const startTime = performance.now();
+          const startCycles = await this.getCPUCycles();
+        
+          await new Promise(r => setTimeout(r, 500)); // Longer sampling period
+        
+          const endTime = performance.now();
+          const endCycles = await this.getCPUCycles();
+        
+          const usage = ((endCycles - startCycles) / (endTime - startTime)) * 100;
+          return {
+              usage: Math.min(usage, 100).toFixed(1),
+              cores: navigator.hardwareConcurrency
+          };
+      }
 
-    // CPU Usage (Live Percentage)
-    try {
-        if ('performance' in window && performance.now) {
-            const start = performance.now();
-            for (let i = 0; i < 1e7; i++) {} // CPU-intensive task for measurement
-            const end = performance.now();
-            const usagePercentage = Math.min(100, ((end - start) / 10).toFixed(2)); // Simulated usage percentage
-            cpuElement.textContent = `${usagePercentage}% (${navigator.hardwareConcurrency || 'Unknown'} cores)`;
-        } else {
-            cpuElement.textContent = "Live CPU Data Not Available";
-        }
-    } catch (error) {
-        cpuElement.textContent = "Error Fetching CPU Data";
+      async getCPUCycles() {
+          return new Promise(resolve => {
+              const work = () => {
+                  const start = performance.now();
+                  while (performance.now() - start < 5) {} // More intensive measurement
+                  resolve(performance.now());
+              };
+              requestIdleCallback(work);
+          });
+      }
+
+      async getMemoryInfo() {
+          if (performance && performance.memory) {
+              const totalRAM = navigator.deviceMemory * 1024 * 1024 * 1024;
+              const usedRAM = performance.memory.usedJSHeapSize;
+            
+              return {
+                  used: (usedRAM / (1024 * 1024 * 1024)).toFixed(2),
+                  total: (totalRAM / (1024 * 1024 * 1024)).toFixed(2)
+              };
+          }
+          return null;
+      }
+
+      async getStorageInfo() {
+          if (navigator.storage && navigator.storage.estimate) {
+              const {quota, usage} = await navigator.storage.estimate();
+              return {
+                  used: (usage / (1024 * 1024 * 1024)).toFixed(2),
+                  total: (quota / (1024 * 1024 * 1024)).toFixed(2)
+              };
+          }
+          return null;
+      }
+
+      async updateStats() {
+          const cpuInfo = await this.getCPUUsage();
+          const memInfo = await this.getMemoryInfo();
+          const storageInfo = await this.getStorageInfo();
+
+          if (cpuInfo) this.cpuElement.textContent = `${cpuInfo.usage}% (${cpuInfo.cores} cores)`;
+          if (memInfo) this.memoryElement.textContent = `${memInfo.used}GB / ${memInfo.total}GB`;
+          if (storageInfo) this.storageElement.textContent = `${storageInfo.used}GB / ${storageInfo.total}GB`;
+      }
+
+      start() {
+          this.updateStats();
+          setInterval(() => this.updateStats(), 1000);
+      }
+  }
+
+  // Initialize and start monitoring
+  const systemMonitor = new SystemMonitor();
+  systemMonitor.start();
+
+// Dev Focus Zone Functionality
+class DevFocusZone {
+    constructor() {
+        this.timeLeft = 25 * 60;
+        this.isRunning = false;
+        this.streak = parseInt(localStorage.getItem('codingStreak')) || 0;
+        this.lastCoded = localStorage.getItem('lastCoded');
+        this.progress = parseInt(localStorage.getItem('dailyProgress')) || 0;
+        
+        this.initializeTimers();
+        this.updateStreak();
+        this.updateProgress();
     }
-    cpuElement.style.color = "white";
 
-    // Memory Usage
-    try {
-        if (navigator.deviceMemory) {
-            const usedMemory = (navigator.deviceMemory * 1024); // Approximate memory in MB
-            const totalMemory = `${navigator.deviceMemory}GB`;
-            memoryElement.textContent = `${usedMemory.toFixed(2)}MB / ${totalMemory}`;
-        } else {
-            memoryElement.textContent = "Memory Data Not Available";
-        }
-    } catch (error) {
-        memoryElement.textContent = "Error Fetching Memory Data";
+    initializeTimers() {
+        document.getElementById('startTimer').addEventListener('click', () => this.toggleTimer());
+        document.getElementById('resetTimer').addEventListener('click', () => this.resetTimer());
+        this.updateTimerDisplay();
     }
-    memoryElement.style.color = "white";
 
-    // Storage Usage
-    try {
-        if (navigator.storage && navigator.storage.estimate) {
-            const estimate = await navigator.storage.estimate();
-            const used = (estimate.usage / (1024 * 1024)).toFixed(2); // Convert bytes to MB
-            const total = (estimate.quota / (1024 * 1024)).toFixed(2); // Convert bytes to MB
-            diskElement.textContent = `${used}MB / ${total}MB`;
+    toggleTimer() {
+        if (this.isRunning) {
+            clearInterval(this.interval);
+            document.getElementById('startTimer').textContent = 'Start Focus';
         } else {
-            diskElement.textContent = "Storage Data Not Available";
+            this.interval = setInterval(() => this.updateTimer(), 1000);
+            document.getElementById('startTimer').textContent = 'Pause';
         }
-    } catch (error) {
-        diskElement.textContent = "Error Fetching Storage Data";
+        this.isRunning = !this.isRunning;
     }
-    diskElement.style.color = "white";
+
+    updateTimer() {
+        if (this.timeLeft > 0) {
+            this.timeLeft--;
+            this.updateTimerDisplay();
+        } else {
+            this.completeSession();
+        }
+    }
+
+    updateTimerDisplay() {
+        const minutes = Math.floor(this.timeLeft / 60);
+        const seconds = this.timeLeft % 60;
+        document.getElementById('timer').textContent = 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    completeSession() {
+        this.progress += 25;
+        localStorage.setItem('dailyProgress', this.progress);
+        this.updateProgress();
+        this.updateStreak();
+        this.resetTimer();
+    }
+
+    resetTimer() {
+        clearInterval(this.interval);
+        this.timeLeft = 25 * 60;
+        this.isRunning = false;
+        document.getElementById('startTimer').textContent = 'Start Focus';
+        this.updateTimerDisplay();
+    }
+
+    updateProgress() {
+        const progress = Math.min(this.progress, 100);
+        document.getElementById('progressFill').style.width = `${progress}%`;
+    }
+
+    updateStreak() {
+        const today = new Date().toDateString();
+        if (this.lastCoded !== today) {
+            this.streak++;
+            localStorage.setItem('codingStreak', this.streak);
+            localStorage.setItem('lastCoded', today);
+        }
+        document.getElementById('streakCount').textContent = `${this.streak} days`;
+    }
 }
 
-// Task functionality
+// Initialize Dev Focus Zone
+const devFocus = new DevFocusZone();// Task functionality
 let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
 
 function addTask() {
@@ -185,8 +292,8 @@ function renderNotes() {
             </div>
             <div style="white-space: pre-wrap; font-size: ${note.fontSize}px;">${note.text}</div>
             <div class="note-actions">
-                <button onclick="editNote(${note.id})">Edit</button>
-                <button onclick="deleteNote(${note.id})">Delete</button>
+                <button onclick="editNote(${note.id})" class="edit-btn">Edit</button>
+                <button onclick="deleteNote(${note.id})" class="delete-btn">Delete</button>
             </div>
         </div>
     `).join('');
@@ -215,6 +322,11 @@ function clearNoteForm() {
     document.getElementById('notepad').value = '';
 }
 
+function saveNote() {
+    const notepad = document.getElementById('notepad');
+    localStorage.setItem('currentNote', notepad.value);
+}
+
 // Initialize everything
 window.onload = () => {
     setInterval(updateClock, 1000); // Clock updates every second
@@ -226,4 +338,8 @@ window.onload = () => {
     renderTasks();
     renderNotes();
     initializeNotepad();
+    const savedNote = localStorage.getItem('currentNote');
+    if (savedNote) {
+        document.getElementById('notepad').value = savedNote;
+    }
 };
