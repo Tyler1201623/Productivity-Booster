@@ -1,6 +1,9 @@
 body {
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    width: 100vw;
+    overflow-x: hidden;
+    box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #1e2a78 0%, #ff2e4c 100%);
     min-height: 100vh;
@@ -9,11 +12,13 @@ body {
 
 .widget-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 25px;
+    padding: 15px;
+    box-sizing: border-box;
 }
 
 .widget-section {
@@ -26,6 +31,9 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.2);
     min-height: 400px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
 }
 
 .widget-section:hover {
@@ -70,13 +78,13 @@ body {
     color: rgba(255, 255, 255, 0.95);
     line-height: 1.8;
     padding: 25px;
-    font-size: clamp(1.4em, 2.2vw, 1.8em); /* Increased font size */
+    font-size: clamp(1.4em, 2.2vw, 1.8em);
     border-top: 2px solid rgba(255, 255, 255, 0.2);
     margin-top: auto;
     animation: fadeInOut 30s infinite;
-    font-weight: 500; /* Added weight for better visibility */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Added subtle shadow */
-    letter-spacing: 0.5px; /* Improved letter spacing */
+    font-weight: 500;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.5px;
 }
 
 @keyframes fadeInOut {
@@ -86,33 +94,7 @@ body {
 
 /* Tasks Section with Perfect Button Alignment */
 .task-input {
-
-/* Update text colors for all sections */
-.task-input input {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.task-input input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.task {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-}
-
-#notepad {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.saved-note {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-}    display: flex;
+    display: flex;
     gap: 15px;
     margin-bottom: 20px;
     width: 100%;
@@ -120,7 +102,7 @@ body {
 }
 
 .task-input input {
-    width: calc(100% - 120px); /* Account for button width + gap */
+    width: calc(100% - 120px);
     padding: 15px;
     border: 2px solid #e0e0e0;
     border-radius: 12px;
@@ -141,22 +123,6 @@ body {
     flex-shrink: 0;
 }
 
-/* Responsive Perfection */
-@media (max-width: 768px) {
-    .task-input {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .task-input input {
-        width: 100%;
-    }
-    
-    .task-input button {
-        width: 100%;
-    }
-}
-
 .task-input button:hover {
     background: #1e2a78;
     transform: scale(1.05);
@@ -166,44 +132,46 @@ body {
     flex-grow: 1;
     overflow-y: auto;
 }
-  .task {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(5px);
-      border-radius: 12px;
-      padding: 15px 20px;
-      margin: 12px 0;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-  }
 
-  .task:hover {
-      transform: translateX(8px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  }
+.task {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin: 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
 
-  .task input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-  }
+.task:hover {
+    transform: translateX(8px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
 
-  .delete-btn {
-      margin-left: auto;
-      padding: 8px 15px;
-      background: rgba(255, 255, 255, 0.1);
-      border: none;
-      border-radius: 8px;
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s ease;
-  }
+.task input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
 
-  .delete-btn:hover {
-      background: rgba(255, 0, 0, 0.2);
-  }
+.delete-btn {
+    margin-left: auto;
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.delete-btn:hover {
+    background: rgba(255, 0, 0, 0.2);
+}
+
 /* Dev Focus Zone Styles */
 #focus-section {
     background: linear-gradient(45deg, #1e2a78 0%, #ff2e4c 100%);
@@ -339,84 +307,29 @@ body {
     border-radius: 15px;
     margin-top: 20px;
 }
-  .saved-note {
-      background: white;
-      border-radius: 15px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
-      color: #2c3e50; /* Dark text color */
-  }
 
-  .note-header {
-      color: #2c3e50;
-      font-weight: 500;
-  }
+.saved-note {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    color: #2c3e50;
+}
 
-  .saved-note div {
-      color: #2c3e50;
-  }
+.note-header {
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.saved-note div {
+    color: #2c3e50;
+}
+
 .saved-note:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-@keyframes fadeInOut {
-    0%, 100% { opacity: 0; transform: translateY(15px); }
-    10%, 90% { opacity: 1; transform: translateY(0); }
-}
-
-/* Apply the Time & Date section's perfect gradient to all sections */
-.widget-section {
-    background: linear-gradient(45deg, #1e2a78 0%, #ff2e4c 100%);
-    color: white;
-    padding: 30px;
-    border-radius: 25px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(10px);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    min-height: 400px;
-}
-
-.widget-section h2 {
-    color: white;
-    border-bottom: 3px solid rgba(255, 255, 255, 0.3);
-}
-
-/* Professional Responsive Design */
-@media (max-width: 768px) {
-    .widget-section {
-        padding: 20px;
-        gap: 15px;
-    }
-
-    .task-input {
-        flex-direction: column;
-    }
-
-    .task-input input,
-    .task-input button {
-        width: 100%;
-    }
-
-    #notepad {
-        min-height: 150px;
-    }
-}
-
-@media (max-width: 480px) {
-    .widget-section {
-        padding: 15px;
-        gap: 10px;
-    }
-
-    .stat-item {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
-    }
 }
 
 #focus-section h2 {
@@ -447,4 +360,109 @@ body {
 .saved-note .note-actions button:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Update text colors for all sections */
+.task-input input {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.task-input input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.task {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+#notepad {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.saved-note {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Mobile optimizations */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 0;
+    }
+    
+    .widget-container {
+        padding: 10px;
+        gap: 15px;
+    }
+    
+    .widget-section {
+        padding: 15px;
+        min-height: auto;
+        margin-bottom: 15px;
+    }
+    
+    .task-input, 
+    .note-actions {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .task-input input,
+    .task-input button,
+    .note-actions button {
+        width: 100%;
+        margin: 0;
+    }
+    
+    #notepad {
+        width: 100%;
+        margin: 0;
+    }
+    
+    .timer-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .timer-controls button {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* Small screen refinements */
+@media screen and (max-width: 480px) {
+    .widget-container {
+        padding: 8px;
+        gap: 12px;
+    }
+    
+    .widget-section {
+        padding: 12px;
+        border-radius: 15px;
+    }
+    
+    #time {
+        font-size: 2.5em;
+    }
+    
+    #date {
+        font-size: 1.1em;
+    }
+    
+    .quote {
+        font-size: 1em;
+        padding: 10px;
+    }
+    
+    .saved-note {
+        padding: 15px;
+        margin-bottom: 12px;
+    }
 }
